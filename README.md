@@ -4,6 +4,10 @@
 
 PitchMe is an AI-powered voice interview coach that lets students and job seekers practice realistic interview questions, receive personalized communication feedback, and repeatedly improve their answers through measurable progress.
 
+<p align="center">
+  <img src="./assets/pitchme-preview.jpg" alt="PitchMe App UI Preview" width="360" style="border-radius: 24px;" />
+</p>
+
 ---
 
 ## 🎯 The Problem PitchMe Solves
