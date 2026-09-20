@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "PitchMe",
+    "slug": "pitchme",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "plugins": [
+      [
+        "expo-av",
+        {
+          "microphonePermission": "PitchMe uses your microphone to analyze interview answers."
+        }
+      ],
+      "expo-asset"
+    ]
+  }
+}
