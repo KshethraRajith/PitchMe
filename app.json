@@ -18,6 +18,16 @@
         }
       ],
       "expo-asset"
-    ]
+    ],
+    "android": {
+      "package": "com.kshethra.pitchme",
+      "permissions": ["RECORD_AUDIO"]
+    },
+    "ios": {
+      "bundleIdentifier": "com.kshethra.pitchme",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "PitchMe uses your microphone to record practice interview answers."
+      }
+    }
   }
 }
