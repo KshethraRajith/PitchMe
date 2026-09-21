@@ -5,6 +5,7 @@
     "version": "0.1.0",
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
+    "icon": "./assets/icon.png",
     "platforms": [
       "ios",
       "android",
@@ -21,6 +22,11 @@
     ],
     "android": {
       "package": "com.kshethra.pitchme",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0A0D14"
+      },
       "permissions": ["RECORD_AUDIO"]
     },
     "ios": {
