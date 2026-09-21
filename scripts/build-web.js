@@ -26,7 +26,13 @@ if (fs.existsSync(indexPath)) {
   // Disable Jekyll processing so _expo directory is served correctly
   fs.writeFileSync(path.join(distPath, '.nojekyll'), '', 'utf-8');
 
-  console.log('✅ Web build processed with relative assets, .nojekyll & 404 fallback for GitHub Pages!');
+  // Copy privacy.html for Google Play Store compliance
+  const privacySrc = path.join(__dirname, '..', 'privacy.html');
+  if (fs.existsSync(privacySrc)) {
+    fs.copyFileSync(privacySrc, path.join(distPath, 'privacy.html'));
+  }
+
+  console.log('✅ Web build processed with relative assets, .nojekyll, privacy policy & 404 fallback!');
 } else {
   console.error('❌ dist/index.html not found!');
   process.exit(1);
