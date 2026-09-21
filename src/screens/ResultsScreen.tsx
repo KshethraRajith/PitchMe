@@ -62,13 +62,26 @@ export const ResultsScreen: React.FC<ResultsScreenProps> = ({
       </View>
 
       <ScrollView contentContainerStyle={styles.content}>
+        {/* Question context banner */}
+        <View style={styles.questionContextCard}>
+          <View style={styles.questionContextTop}>
+            <Text style={styles.questionContextLabel}>📋 QUESTION PRACTICED</Text>
+            <View style={styles.categoryPill}>
+              <Text style={styles.categoryPillText}>{currentAttempt.categoryName}</Text>
+            </View>
+          </View>
+          <Text style={styles.questionContextText}>
+            "{currentAttempt.questionText}"
+          </Text>
+        </View>
+
         {/* Attempt info */}
         <View style={styles.topMetaRow}>
           <Text style={styles.attemptBadge}>
             ATTEMPT {currentAttempt.attemptNumber}
           </Text>
           <Text style={styles.questionCategoryBadge}>
-            {currentAttempt.categoryName}
+            Score out of 100
           </Text>
         </View>
 
@@ -246,6 +259,47 @@ const styles = StyleSheet.create({
   content: {
     padding: 20,
     paddingBottom: 40,
+  },
+  questionContextCard: {
+    backgroundColor: '#131224',
+    borderColor: '#2E2650',
+    borderWidth: 1,
+    borderRadius: 18,
+    padding: 16,
+    marginBottom: 16,
+  },
+  questionContextTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  questionContextLabel: {
+    color: '#8E8EA8',
+    fontSize: 10,
+    fontWeight: '800',
+    letterSpacing: 1.2,
+  },
+  categoryPill: {
+    backgroundColor: '#201A38',
+    borderColor: '#4C3D7A',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 9,
+    paddingVertical: 3,
+  },
+  categoryPillText: {
+    color: '#A78BFA',
+    fontSize: 10,
+    fontWeight: '800',
+    letterSpacing: 0.8,
+  },
+  questionContextText: {
+    color: '#DDD6FE',
+    fontSize: 14,
+    fontWeight: '600',
+    lineHeight: 21,
+    fontStyle: 'italic',
   },
   topMetaRow: {
     flexDirection: 'row',

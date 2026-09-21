@@ -1,6 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import { Image, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { PrimaryButton } from '../components/PrimaryButton';
 
 interface WelcomeScreenProps {
@@ -12,15 +11,12 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
     <SafeAreaView style={styles.safe}>
       <StatusBar barStyle="light-content" />
       <View style={styles.container}>
-        {/* Logo badge */}
-        <LinearGradient
-          colors={['#8B5CF6', '#6D28D9']}
-          style={styles.logoBadge}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-        >
-          <Text style={styles.logoMark}>P</Text>
-        </LinearGradient>
+        {/* Logo */}
+        <Image
+          source={require('../../assets/logo.jpg')}
+          style={styles.logoImage}
+          resizeMode="cover"
+        />
 
         <Text style={styles.brandTitle}>PITCHME</Text>
         <Text style={styles.tagline}>
@@ -56,22 +52,11 @@ const styles = StyleSheet.create({
     paddingVertical: 24,
     justifyContent: 'center',
   },
-  logoBadge: {
-    width: 68,
-    height: 68,
+  logoImage: {
+    width: 80,
+    height: 80,
     borderRadius: 22,
-    alignItems: 'center',
-    justifyContent: 'center',
     marginBottom: 20,
-    shadowColor: '#8B5CF6',
-    shadowOpacity: 0.5,
-    shadowRadius: 24,
-    elevation: 8,
-  },
-  logoMark: {
-    fontSize: 38,
-    fontWeight: '900',
-    color: '#FFFFFF',
   },
   brandTitle: {
     color: '#A78BFA',
