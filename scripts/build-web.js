@@ -23,7 +23,10 @@ if (fs.existsSync(indexPath)) {
   const notFoundPath = path.join(distPath, '404.html');
   fs.writeFileSync(notFoundPath, html, 'utf-8');
 
-  console.log('✅ Web build processed with relative assets & 404 fallback for GitHub Pages!');
+  // Disable Jekyll processing so _expo directory is served correctly
+  fs.writeFileSync(path.join(distPath, '.nojekyll'), '', 'utf-8');
+
+  console.log('✅ Web build processed with relative assets, .nojekyll & 404 fallback for GitHub Pages!');
 } else {
   console.error('❌ dist/index.html not found!');
   process.exit(1);
