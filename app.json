@@ -2,6 +2,7 @@
   "expo": {
     "name": "PitchMe",
     "slug": "pitchme",
+    "owner": "kshethra-rajith",
     "version": "0.1.0",
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
@@ -27,12 +28,21 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0A0D14"
       },
-      "permissions": ["RECORD_AUDIO"]
+      "permissions": [
+        "RECORD_AUDIO",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ]
     },
     "ios": {
       "bundleIdentifier": "com.kshethra.pitchme",
       "infoPlist": {
         "NSMicrophoneUsageDescription": "PitchMe uses your microphone to record practice interview answers."
+      }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "91385324-de8a-4ba1-a72f-0a2345f65cad"
       }
     }
   }
