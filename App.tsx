@@ -213,19 +213,13 @@ export default function App() {
   };
 
   // RENDER FLOWS
-  if (flowState === 'welcome') {
-    return (
-      <View style={styles.root}>
-        <StatusBar style="light" />
-        <WelcomeScreen onStart={() => setFlowState('tabs')} />
-      </View>
-    );
-  }
+  const renderScreen = () => {
+    if (flowState === 'welcome') {
+      return <WelcomeScreen onStart={() => setFlowState('tabs')} />;
+    }
 
-  if (flowState === 'practice_setup') {
-    return (
-      <View style={styles.root}>
-        <StatusBar style="light" />
+    if (flowState === 'practice_setup') {
+      return (
         <PracticeSetupScreen
           onBack={() => {
             setFlowState('tabs');
@@ -233,14 +227,11 @@ export default function App() {
           }}
           onLaunchSession={handleLaunchSession}
         />
-      </View>
-    );
-  }
+      );
+    }
 
-  if (flowState === 'interview_question') {
-    return (
-      <View style={styles.root}>
-        <StatusBar style="light" />
+    if (flowState === 'interview_question') {
+      return (
         <InterviewScreen
           question={activeQuestion}
           questionIndex={currentQuestionIndex}
@@ -251,39 +242,28 @@ export default function App() {
             setActiveTab('home');
           }}
         />
-      </View>
-    );
-  }
+      );
+    }
 
-  if (flowState === 'recording') {
-    return (
-      <View style={styles.root}>
-        <StatusBar style="light" />
+    if (flowState === 'recording') {
+      return (
         <RecordingScreen
           questionText={activeQuestion.question}
           onFinishRecording={handleFinishRecording}
           onCancel={() => setFlowState('interview_question')}
         />
-      </View>
-    );
-  }
+      );
+    }
 
-  if (flowState === 'analyzing') {
-    return (
-      <View style={styles.root}>
-        <StatusBar style="light" />
-        <AnalysisLoader onComplete={handleAnalysisComplete} />
-      </View>
-    );
-  }
+    if (flowState === 'analyzing') {
+      return <AnalysisLoader onComplete={handleAnalysisComplete} />;
+    }
 
-  if (flowState === 'results') {
-    const previousAttempt =
-      questionAttempts.length > 1 ? questionAttempts[0] : undefined;
+    if (flowState === 'results') {
+      const previousAttempt =
+        questionAttempts.length > 1 ? questionAttempts[0] : undefined;
 
-    return (
-      <View style={styles.root}>
-        <StatusBar style="light" />
+      return (
         <ResultsScreen
           currentAttempt={currentAttempt}
           previousAttempt={previousAttempt}
@@ -293,19 +273,16 @@ export default function App() {
           hasNextQuestion={currentQuestionIndex + 1 < sessionQuestions.length}
           totalAttemptsCount={questionAttempts.length}
         />
-      </View>
-    );
-  }
+      );
+    }
 
-  if (flowState === 'comparison') {
-    const personalBest = Math.max(
-      ...questionAttempts.map((a) => a.overallScore),
-      currentAttempt.overallScore
-    );
+    if (flowState === 'comparison') {
+      const personalBest = Math.max(
+        ...questionAttempts.map((a) => a.overallScore),
+        currentAttempt.overallScore
+      );
 
-    return (
-      <View style={styles.root}>
-        <StatusBar style="light" />
+      return (
         <ComparisonScreen
           questionTitle={activeQuestion.question}
           categoryName={activeQuestion.categoryName}
@@ -320,59 +297,67 @@ export default function App() {
             setFlowState('practice_setup');
           }}
         />
+      );
+    }
+
+    // DEFAULT 5-TAB SCREEN
+    return (
+      <View style={styles.tabContainer}>
+        <View style={styles.screenContent}>
+          {activeTab === 'home' && (
+            <HomeScreen
+              user={user}
+              recentSessions={sessions}
+              onStartPractice={handleStartPracticeFlow}
+              onOpenSession={handleOpenCompletedSession}
+            />
+          )}
+
+          {activeTab === 'progress' && <ProgressScreen progress={progress} />}
+
+          {activeTab === 'history' && (
+            <HistoryScreen
+              sessions={sessions}
+              streakDays={user.streakDays}
+              bestScore={user.bestOverallScore}
+              onOpenSession={handleOpenCompletedSession}
+            />
+          )}
+
+          {activeTab === 'profile' && (
+            <ProfileScreen
+              user={user}
+              onOpenPaywall={() => setShowPaywall(true)}
+              onClearHistory={handleClearHistory}
+            />
+          )}
+        </View>
+
+        {/* Persistent Bottom Tab Bar */}
+        <BottomNav activeTab={activeTab} onSelectTab={handleSelectTab} />
+
+        {/* Paywall Sheet */}
+        <PaywallModal
+          visible={showPaywall}
+          onClose={() => setShowPaywall(false)}
+          onSuccessPro={() =>
+            setUser((prev) => ({
+              ...prev,
+              isPro: true,
+            }))
+          }
+          improvementText={`${SAMPLE_FIRST_ATTEMPT.overallScore} → ${user.bestOverallScore} 🎉`}
+        />
       </View>
     );
-  }
+  };
 
-  // DEFAULT 5-TAB SCREEN
   return (
     <View style={styles.root}>
       <StatusBar style="light" />
-      <View style={styles.screenContent}>
-        {activeTab === 'home' && (
-          <HomeScreen
-            user={user}
-            recentSessions={sessions}
-            onStartPractice={handleStartPracticeFlow}
-            onOpenSession={handleOpenCompletedSession}
-          />
-        )}
-
-        {activeTab === 'progress' && <ProgressScreen progress={progress} />}
-
-        {activeTab === 'history' && (
-          <HistoryScreen
-            sessions={sessions}
-            streakDays={user.streakDays}
-            bestScore={user.bestOverallScore}
-            onOpenSession={handleOpenCompletedSession}
-          />
-        )}
-
-        {activeTab === 'profile' && (
-          <ProfileScreen
-            user={user}
-            onOpenPaywall={() => setShowPaywall(true)}
-            onClearHistory={handleClearHistory}
-          />
-        )}
+      <View style={styles.appShell}>
+        {renderScreen()}
       </View>
-
-      {/* Persistent Bottom Tab Bar */}
-      <BottomNav activeTab={activeTab} onSelectTab={handleSelectTab} />
-
-      {/* Paywall Sheet */}
-      <PaywallModal
-        visible={showPaywall}
-        onClose={() => setShowPaywall(false)}
-        onSuccessPro={() =>
-          setUser((prev) => ({
-            ...prev,
-            isPro: true,
-          }))
-        }
-        improvementText={`${SAMPLE_FIRST_ATTEMPT.overallScore} → ${user.bestOverallScore} 🎉`}
-      />
     </View>
   );
 }
@@ -380,7 +365,18 @@ export default function App() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+    backgroundColor: '#07070D',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  appShell: {
+    flex: 1,
+    width: '100%',
+    maxWidth: 520,
     backgroundColor: '#0B0B14',
+  },
+  tabContainer: {
+    flex: 1,
   },
   screenContent: {
     flex: 1,
