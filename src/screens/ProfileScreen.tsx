@@ -15,12 +15,16 @@ interface ProfileScreenProps {
   user: UserProfile;
   onOpenPaywall: () => void;
   onClearHistory: () => void;
+  onSignOut?: () => void;
+  onReplaySpark?: () => void;
 }
 
 export const ProfileScreen: React.FC<ProfileScreenProps> = ({
   user,
   onOpenPaywall,
   onClearHistory,
+  onSignOut,
+  onReplaySpark,
 }) => {
   const handleClearConfirm = () => {
     onClearHistory();
@@ -116,6 +120,44 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
               ⌫  Delete audio recordings & practice history
             </Text>
           </TouchableOpacity>
+        </View>
+
+        {/* Account Actions: Replay Spark & Sign Out */}
+        <Text style={styles.sectionHeader}>ACCOUNT ACTIONS</Text>
+        <View style={styles.actionButtonsCol}>
+          {onReplaySpark && (
+            <TouchableOpacity
+              onPress={onReplaySpark}
+              style={styles.replaySparkBtn}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.replaySparkIcon}>⚡</Text>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.replaySparkTitle}>Replay Spark Entry</Text>
+                <Text style={styles.replaySparkSubtitle}>
+                  View the cinematic logo lighting animation
+                </Text>
+              </View>
+              <Text style={styles.actionChevron}>›</Text>
+            </TouchableOpacity>
+          )}
+
+          {onSignOut && (
+            <TouchableOpacity
+              onPress={onSignOut}
+              style={styles.signOutBtn}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.signOutIcon}>🚪</Text>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.signOutTitle}>Sign Out / Switch Account</Text>
+                <Text style={styles.signOutSubtitle}>
+                  Currently signed in as {user.email}
+                </Text>
+              </View>
+              <Text style={styles.actionChevron}>›</Text>
+            </TouchableOpacity>
+          )}
         </View>
 
         {/* App Version Info */}
@@ -329,6 +371,61 @@ const styles = StyleSheet.create({
     color: '#FDA4AF',
     fontSize: 12,
     fontWeight: '700',
+  },
+  actionButtonsCol: {
+    gap: 12,
+    marginBottom: 24,
+  },
+  replaySparkBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#19152B',
+    borderRadius: 16,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: '#3B2A66',
+  },
+  replaySparkIcon: {
+    fontSize: 20,
+    marginRight: 14,
+  },
+  replaySparkTitle: {
+    color: '#DDD6FE',
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  replaySparkSubtitle: {
+    color: '#8B5CF6',
+    fontSize: 11,
+    marginTop: 2,
+  },
+  signOutBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#161622',
+    borderRadius: 16,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: '#262638',
+  },
+  signOutIcon: {
+    fontSize: 20,
+    marginRight: 14,
+  },
+  signOutTitle: {
+    color: '#F87171',
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  signOutSubtitle: {
+    color: '#71718A',
+    fontSize: 11,
+    marginTop: 2,
+  },
+  actionChevron: {
+    fontSize: 20,
+    color: '#6B7280',
+    marginLeft: 8,
   },
   footerInfo: {
     alignItems: 'center',

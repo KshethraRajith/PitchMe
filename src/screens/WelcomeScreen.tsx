@@ -1,12 +1,13 @@
 import React from 'react';
-import { Image, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { Image, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { PrimaryButton } from '../components/PrimaryButton';
 
 interface WelcomeScreenProps {
   onStart: () => void;
+  onSignIn?: () => void;
 }
 
-export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
+export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart, onSignIn }) => {
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar barStyle="light-content" />
@@ -29,7 +30,14 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
         </Text>
 
         <View style={styles.footer}>
-          <PrimaryButton label="Start Practicing  →" onPress={onStart} />
+          <PrimaryButton label="Get Started  →" onPress={onStart} />
+          
+          {onSignIn && (
+            <TouchableOpacity onPress={onSignIn} style={styles.signInButton} activeOpacity={0.8}>
+              <Text style={styles.signInButtonText}>Already have an account? <Text style={styles.signInHighlight}>Sign In</Text></Text>
+            </TouchableOpacity>
+          )}
+
           <View style={styles.privacyNote}>
             <Text style={styles.privacyText}>
               🔒  Your voice, your data. Recordings are private and controlled by you.
@@ -92,5 +100,18 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
     textAlign: 'center',
+  },
+  signInButton: {
+    alignItems: 'center',
+    paddingVertical: 10,
+  },
+  signInButtonText: {
+    color: '#9494A8',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  signInHighlight: {
+    color: '#A78BFA',
+    fontWeight: '800',
   },
 });

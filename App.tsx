@@ -25,6 +25,8 @@ import { AnalysisEngine } from './src/services/analysisEngine';
 
 // Screens
 import { WelcomeScreen } from './src/screens/WelcomeScreen';
+import { AuthScreen } from './src/screens/AuthScreen';
+import { SparkEntryScreen } from './src/screens/SparkEntryScreen';
 import { HomeScreen } from './src/screens/HomeScreen';
 import { PracticeSetupScreen } from './src/screens/PracticeSetupScreen';
 import { InterviewScreen } from './src/screens/InterviewScreen';
@@ -39,6 +41,8 @@ import { PaywallModal } from './src/screens/PaywallModal';
 type FlowState =
   | 'tabs'
   | 'welcome'
+  | 'auth'
+  | 'spark_entry'
   | 'practice_setup'
   | 'interview_question'
   | 'recording'
@@ -59,6 +63,10 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<MainTab>('home');
   const [showPaywall, setShowPaywall] = useState(false);
 
+  // Authentication & Spark Entry State
+  const [authMode, setAuthMode] = useState<'login' | 'signup'>('signup');
+  const [isNewUser, setIsNewUser] = useState(false);
+
   // Practice Session State
   const [sessionQuestions, setSessionQuestions] = useState<InterviewQuestion[]>([
     MOCK_QUESTIONS[0],
@@ -77,6 +85,43 @@ export default function App() {
 
   const activeQuestion =
     sessionQuestions[currentQuestionIndex] || MOCK_QUESTIONS[0];
+
+  // Auth Flow Handlers
+  const handleOpenAuth = (mode: 'login' | 'signup') => {
+    setAuthMode(mode);
+    setFlowState('auth');
+  };
+
+  const handleAuthSuccess = (
+    profile: Partial<UserProfile>,
+    newUser: boolean
+  ) => {
+    setUser((prev) => ({
+      ...prev,
+      ...profile,
+      name: profile.name || prev.name,
+      email: profile.email || prev.email,
+      avatarLetter:
+        profile.avatarLetter ||
+        (profile.name ? profile.name.charAt(0).toUpperCase() : prev.avatarLetter),
+    }));
+    setIsNewUser(newUser);
+    setFlowState('spark_entry');
+  };
+
+  const handleSparkComplete = () => {
+    setFlowState('tabs');
+    setActiveTab('home');
+  };
+
+  const handleSignOut = () => {
+    setAuthMode('login');
+    setFlowState('auth');
+  };
+
+  const handleReplaySpark = () => {
+    setFlowState('spark_entry');
+  };
 
   // Start Practice from anywhere
   const handleStartPracticeFlow = () => {
@@ -215,7 +260,33 @@ export default function App() {
   // RENDER FLOWS
   const renderScreen = () => {
     if (flowState === 'welcome') {
-      return <WelcomeScreen onStart={() => setFlowState('tabs')} />;
+      return (
+        <WelcomeScreen
+          onStart={() => handleOpenAuth('signup')}
+          onSignIn={() => handleOpenAuth('login')}
+        />
+      );
+    }
+
+    if (flowState === 'auth') {
+      return (
+        <AuthScreen
+          initialMode={authMode}
+          onAuthSuccess={handleAuthSuccess}
+          onBackToWelcome={() => setFlowState('welcome')}
+        />
+      );
+    }
+
+    if (flowState === 'spark_entry') {
+      return (
+        <SparkEntryScreen
+          userName={user.name}
+          userEmail={user.email}
+          isNewUser={isNewUser}
+          onComplete={handleSparkComplete}
+        />
+      );
     }
 
     if (flowState === 'practice_setup') {
@@ -329,6 +400,8 @@ export default function App() {
               user={user}
               onOpenPaywall={() => setShowPaywall(true)}
               onClearHistory={handleClearHistory}
+              onSignOut={handleSignOut}
+              onReplaySpark={handleReplaySpark}
             />
           )}
         </View>
